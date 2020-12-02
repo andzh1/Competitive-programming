@@ -158,4 +158,20 @@ int main(){
     
     sort(stringA.begin(), stringA.end());
     stringA.find(',');
+
+    //COMPLEX
+    complex <long double> p = {4,3};
+    int mod = abs(p);//returns sqrt(x^2 + y^2) of p, so in fact it returns length of p
+    double polarAngle = arg(p);//returns angle between p & Ox
+    complex <long double> newP = polar(5,1);//newP is vector of length 5, & its polar angle = 1(in radians)
+    /* If we want to change polar angle of vector p, we have to multiply p with polar(1.0, a), a - difference between new angle & previous angle */
+    newP *= polar(1.0, 0.5);
+    /* If we want to multiply two vectors: */
+    complex <long double> a = {3,4};
+    complex <long double> b = {4,3};
+    long double multiplication = (conj(a)*b);//conj(a) makes a.Y negative, & because of that our multiplication is not a.X*b.Y + b.X*a.Y(wrong), but a.X*b.Y - b.X*a.Y (correct)
+    //If our multiplication == 0, b is collinear to a, if its positive, b turns left relatively to a, and vice versa
+    /* If we want to check location of point P and line between points S1 & S2, we have to multiply vectors (P - S1)*(P - S2). If this multiplication is negative, P is higher then line S1S2, otherwise P if lover then line */
+    
+
 }
