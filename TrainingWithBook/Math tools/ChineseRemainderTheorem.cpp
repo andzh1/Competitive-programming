@@ -33,11 +33,8 @@ intType inverceNumber(intType inputNumber, intType module) // Returns X that X *
 long long ChineseRemainerTheorem(vector <pair <intType, intType>> equations){
     long long answer = 0;
     long long X = 1;
-    for(auto eq: equations) {
-        while(eq.first > eq.second) eq.first -= eq.second;
-    }
     for(auto eq: equations) X *= eq.second;
-    for(auto eq: equations) answer += eq.first * (X/eq.second) * inverceNumber(X/eq.second, eq.second);
+    for(auto eq: equations) answer += (eq.first % eq.second) * (X/eq.second) * inverceNumber(X/eq.second, eq.second);
     return answer;
 }
 
