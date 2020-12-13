@@ -16,7 +16,7 @@ long long binominalCoefficient(intType n, intType k){
 /* Description
 Returns amount of sequences of length 2*k, which contain k '(' &  k ')' 
 and in every prefix of this sequence amount of '(' >= amount of '('.
-*/
+CatalansNumber(n) is also amount of different trees with (n+1) vertices.*/
 long long CatalansNumber(intType n) 
 {
     return binominalCoefficient(2*n, n)/(n+1);
