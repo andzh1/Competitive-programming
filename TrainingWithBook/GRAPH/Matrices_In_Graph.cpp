@@ -62,15 +62,6 @@ matrix generateIdentityMatrix(int size) // Returns matrix A: A(i, j) = 1 for all
     return answer;
 }
 
-matrix power(matrix A, int power) //Defined only if A.width = A.height
-{
-    if(power == 0) return generateIdentityMatrix(A.height);
-    matrix answer = A; 
-    power--;
-    while(power--) answer = multiplication(answer, A);
-    return answer;
-}
-
 matrix smartPower(matrix A, int power) // Power, but takes O(log n) time. Same as power(), defined only if A.width = A.height.
 {
     if(power == 0) return generateIdentityMatrix(A.height);
@@ -80,49 +71,35 @@ matrix smartPower(matrix A, int power) // Power, but takes O(log n) time. Same a
 }
 
 /* Description
-For input.height = 3 multiplier will be {0       1      0}
-                                        {0       0      1}
-                                        {C[0]  C[1]  C[2]}, C[i] = coefficients[i].
- */
-matrix generateMatrixForSolvingRecurrentExpression(matrix input, vector <intType> coefficients) 
+Returns new adjacency matrix, where adj(x, y) - amount of different pathes between vertices x & y
+of length 'requiredLengthOfPathes' (adj(x, y) != adj(y, x), if graph is directed) */
+matrix pathesOfRequiredLength(matrix adj, int requiredLengthOfPathes)
 {
-    matrix multiplier;
-    multiplier.height = input.height;
-    multiplier.width = input.height;
-    for(int i = 0; i < multiplier.width*(multiplier.height - 1); i++ ) multiplier.numbers.push_back(0);
-    for(int i = 0; i < multiplier.width; i++ ) multiplier.numbers.push_back(coefficients[i]);
-    for(int i = 0; i < (multiplier.height - 1); i++ ) multiplier.change(i+1, i, switchFlag);
-    return multiplier;
+    return smartPower(adj, requiredLengthOfPathes);
 }
 
-/* Description
-We want to calculate recurrent expression: f(n) = C1*f(n-1) + C2*f(n-2) + ... Ck*f(n-k), 
-with given f(0)...f(k-1) - input and C1...Ck (coefficients).
-coefficients[i] = C[k-i] */
-matrix getRecurrentExpression(matrix input, vector <intType> coefficients, intType n) //We want to calculate recurrent expression: f(n) = C1*f(n-1) + C2*f(n-2) + ... Ck*f(n-k). 
-{
-    matrix multiplier = generateMatrixForSolvingRecurrentExpression(input, coefficients);
-    matrix multiplierInPower = smartPower(multiplier, n);
-    multiplierInPower.height = multiplier.height;
-    multiplierInPower.width = multiplier.width;
-    return multiplication(multiplierInPower, input);
-}
 
 int main(){
-    matrix A, B;
-    A.height = 3;
-    A.width = 1;
-    A.numbers.push_back(0);
-    A.numbers.push_back(0);
-    A.numbers.push_back(1);
-    B.height = 2; //Unless multiplication of matrices A & B is undefined.
-    B.width = 2;
-    vector <int> coefficients;
-    coefficients.push_back(1);
-    coefficients.push_back(1);
-    coefficients.push_back(1);
-    int requiredPower;
-    cin >> requiredPower;
-    matrix answer = getRecurrentExpression(A, coefficients, requiredPower);
-    cout << answer.number(0, 0);
+    matrix adj;
+    int amountOfVertices = 6;
+    adj.height = amountOfVertices;
+    adj.width = amountOfVertices;
+    int amountOfEdges;
+    cin >> amountOfEdges;
+    for(int i = 0; i < amountOfVertices*amountOfVertices; i++) adj.numbers.push_back(0);
+    for(int i = 0; i < amountOfEdges; i++){
+        int a, b;
+        cin >> a >> b;
+        adj.change(a-1, b-1, switchFlag);
+    }
+    int requiredLengthOfPath;
+    cin >> requiredLengthOfPath;
+    matrix newAdj = smartPower(adj, requiredLengthOfPath);
+    int counter = 0;
+    for(int y = 0; y < adj.height; y++){
+        for(int x = 0; x < adj.width; x++){
+            if(newAdj.number(x ,y) == 2) counter ++;
+        }
+    }
+    cout << counter;
 }
